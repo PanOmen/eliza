@@ -1,6 +1,6 @@
 {json{
   "name": "PanOmen",
-  "clients": ["twitter"],
+  "clients": ["pumpfun"],
   "modelProvider": "openrouter",
   "settings": {
     "secrets": {},
