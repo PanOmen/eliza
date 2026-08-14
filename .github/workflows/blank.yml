@@ -1,35 +1,26 @@
 name: Uruchom bota PanOmen
 on:
-  schedule:
-    - cron: '*/30 * * * *' # Bot uruchomi się sam co 30 minut, sprawdzi X i wrzuci posta
-  workflow_dispatch: # Pozwala też odpalić bota ręcznie jednym przyciskiem
+  workflow_dispatch:
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
     steps:
-      - name: Pobierz pliki z repozytorium
+      - name: Pobierz pliki
         uses: actions/checkout@v4
 
-      - name: Konfiguracja Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Pobierz i zainstaluj bota Eliza
+      - name: Uruchomienie procesu Pump.fun
         run: |
-          echo "Pobieranie oficjalnego silnika bota..."
-          git clone https://github.com eliza-core
-          cp PanOmen.character.json eliza-core/characters/
-          cd eliza-core
-          npm install --no-audit --no-fund
-          
-      - name: Uruchomienie bota PanOmen
-        env:
-          TWITTER_USERNAME: ${{ secrets.TWITTER_USERNAME }}
-          TWITTER_PASSWORD: ${{ secrets.TWITTER_PASSWORD }}
-          TWITTER_EMAIL: ${{ secrets.TWITTER_EMAIL }}
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: |
-          cd eliza-core
-          npm run start -- --character=characters/PanOmen.character.json
+          echo "Inicjalizacja darmowego tokenu dla profilu coinmupets..."
+          curl -X POST https://pumpportal.fun \
+            -H "Content-Type: application/json" \
+            -d '{
+              "action": "create",
+              "tokenMetadata": {
+                "name": "PanOmen AI",
+                "symbol": "WHISPER",
+                "description": "Official AI Agent Token for coinmupets profile.",
+                "twitter": "https://x.com",
+                "website": "https://pump.fun/profile/coinmupets"
+              }
+            }'
